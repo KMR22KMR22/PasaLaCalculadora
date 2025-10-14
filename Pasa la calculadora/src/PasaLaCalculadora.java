@@ -2,15 +2,19 @@ import java.util.Scanner;
 import java.util.Random;
 
 public class PasaLaCalculadora {
-
+    //Funcion para generar un número aleatorio entre 11 y 98 (incluyendo ambos)
     public static int randomNumber() {
         Random random = new Random();
-
-        // Generar un número aleatorio entre 11 y 98 (incluyendo ambos)
         int numero = random.nextInt(88) + 11;
         return numero;
     }
-
+    //Funcion para pedirle el nombre a los usuarios
+    public static String player(String play) {
+        System.out.println("Dame el nombre del " + play + " jugador");
+        String player = (new Scanner(System.in)).next();
+        return player;
+    }
+    //Funcion para verificar si los numeros estan en la misma linea y columna
     public static boolean sameLine(int n1, int n2) {
         boolean num1 = n1 == 1 && (n2 == 2 || n2 == 3 || n2 == 4 || n2 == 7);
         boolean num2 = n1 == 2 && (n2 == 1 || n2 == 3 || n2 == 5 || n2 == 8);
@@ -25,31 +29,42 @@ public class PasaLaCalculadora {
         return  num1 || num2 || num3 || num4 || num5 || num6 || num7 || num8 || num9;
 
     }
-
+    //Funcion para pedirle el numero al usuario
     public static int askNumber() {
         System.out.println("Dame un numero entre 1 y 9");
         int num1 = (new Scanner(System.in)).nextInt();
         return num1 ;
     }
-
+    //En esta funcion esta todo los que se le pide a los usuarios en cada turno
+    public static int turno(int newnumber, int ultnumb, String player) {
+        System.out.println("Turno de " + player);
+        System.out.println("Ultimo numero introducido: " + newnumber);
+        newnumber = askNumber();
+        while (newnumber < 1 || newnumber > 9 || newnumber == ultnumb || !sameLine(ultnumb, newnumber)) {
+            System.err.println("no es valido");
+            System.out.println("Turno de " + player);
+            newnumber = askNumber();
+        }
+        return newnumber;
+    }
 
     public static void main(String[] args) {
+        //Variables de los nombres de los jugadores
+        String player1 = "1mer";
+        String player2 = "2do";
+        String player3 = "3er";
 
-        String player3 = "";
-
-        System.out.println("Cuantos jugadores: dame un 2 si son 2 y un 3 si son 3");
+        System.out.println("Cuantos jugadores van a jugar:");
+        System.out.println("1: Para 2 jugadores");
+        System.out.println("2: Para 3 jugadores");
         int players = (new Scanner(System.in)).nextInt();
+        //Aqui guardo los nombres de los usuarios en su variable correspondiente
+        player1 = player(player1);
+        player2 = player(player2);
 
-        System.out.println("Dame el nombre del 1mer jugador:");
-        String player1 = (new Scanner(System.in)).next();
+        if (players == 2){
 
-        System.out.println("Dame el nombre del 2do jugador:");
-        String player2 = (new Scanner(System.in)).next();
-
-        if (players == 3){
-
-            System.out.println("Dame el nombre del 3cer jugador:");
-            player3 = (new Scanner(System.in)).next();
+            player3 = player(player3);
         }
 
         while (true) {
@@ -66,57 +81,41 @@ public class PasaLaCalculadora {
             if (max == -1) {
                 max = randomNumber();
             }
-            //Variables
-            int num1;
-            int num2;
-            int num3;
+            //Variables de los numeros que ingresan los jugadores
+            int newnumber = 0;
+            int lastnumber = 0;
             int total = 0;
-            int ultnumb = 0;
 
             System.out.println("El numero maximo es: " + max);
 
             //1mer turno
             System.out.println("Turno de " + player1);
-            num1 = askNumber();
+            newnumber = askNumber();
 
-            while (num1 < 1 || num1 > 9) {
+            while (newnumber < 1 || newnumber > 9) {
                 System.err.println("no es valido");
                 System.out.println("Turno de " + player1);
-                num1 = askNumber();
+                newnumber = askNumber();
             }
-            total = num1;
-            ultnumb = num1;
+            total = newnumber;
+            lastnumber = newnumber;
             while (true) {
 
                 //Turno del 2do jugador
 
-                System.out.println("Turno de " + player2);
-                num2 = askNumber();
-
-                while (num2 < 1 || num2 > 9 || num2 == ultnumb || !sameLine(ultnumb, num2)) {
-                    System.err.println("no es valido");
-                    System.out.println("Turno de " + player2);
-                    num2 = askNumber();
-                }
-                ultnumb = num2;
-                total = total + num2;
+                newnumber = turno(newnumber, lastnumber, player2);
+                lastnumber = newnumber;
+                total = total + newnumber;
                 if (total >= max) {
                     System.err.println("Pierde: " + player2);
                     break;
                 }
                 //turno del 3cer jugador
 
-                if (players == 3){
-                    System.out.println("Turno de " + player3);
-                    num3 = askNumber();
-
-                    while (num2 < 1 || num2 > 9 || num3 == ultnumb || !sameLine(ultnumb, num3)) {
-                        System.err.println("no es valido");
-                        System.out.println("Turno de " + player3);
-                        num3 = askNumber();
-                    }
-                    ultnumb = num3;
-                    total = total + num3;
+                if (players == 2){
+                    newnumber = turno(newnumber, lastnumber, player3);
+                    lastnumber = newnumber;
+                    total = total + newnumber;
                 }
                 if (total >= max) {
                     System.err.println("Pierde: " + player3);
@@ -124,16 +123,9 @@ public class PasaLaCalculadora {
                 }
 
                 //Turno del 1mer jugador
-                System.out.println("Turno de " + player1);
-                num1 = askNumber();
-
-                while (num2 < 1 || num2 > 9 || num1 == ultnumb || !sameLine(ultnumb, num1)) {
-                    System.err.println("no es valido");
-                    System.out.println("Turno de " + player1);
-                    num1 = askNumber();
-                }
-                ultnumb = num1;
-                total = total + num1;
+                newnumber = turno(newnumber, lastnumber, player1);
+                lastnumber = newnumber;
+                total = total + newnumber;
                 if (total >= max) {
                     System.err.println("Pierde: " + player1);
                     break;
