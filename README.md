@@ -1,1 +1,1 @@
-Los integrantes del grupo son: Kevin, Derek y Gonzalo
+<p>Los integrantes del grupo son: Kevin, Derek y Gonzalo</p>
