@@ -1,7 +1,9 @@
 import java.util.Scanner;
 import java.util.Random;
 
+
 public class PasaLaCalculadora {
+    
     //Funcion para generar un número aleatorio entre 11 y 98 (incluyendo ambos)
     public static int randomNumber() {
         Random random = new Random();
@@ -137,8 +139,9 @@ public class PasaLaCalculadora {
             int replay = (new Scanner(System.in)).nextInt();
             if(replay == 2){
                 break;
+                
             }
-
         }
     }
 }
+
